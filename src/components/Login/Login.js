@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from "react-router-dom";
-import { auth, logInWithEmailAndPassword } from '../../utils/firebase';
+import { auth, logInWithEmailAndPassword, getDomain } from '../../utils/firebase';
 import { useAuthState } from "react-firebase-hooks/auth";
 
 import './Login.css'
 
 function Login() {
     const [email, setEmail] = useState("");
+    const [tenant, setTenant] = useState("");
     const [password, setPassword] = useState("");
     const [user, loading, error] = useAuthState(auth);
     const navigate = useNavigate();
@@ -24,7 +25,7 @@ function Login() {
                     type="text"
                     className="login__textBox"
                     value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    onChange={(e) => {setEmail(e.target.value);setTenant(getDomain(e.target.value))}}
                     placeholder="E-mail Address"
                 />
                 <input
@@ -36,7 +37,7 @@ function Login() {
                 />
                 <button
                     className="login__btn"
-                    onClick={() => logInWithEmailAndPassword(email, password)}
+                    onClick={() => logInWithEmailAndPassword(tenant, email, password)}
                 >
                 Login
                 </button>
